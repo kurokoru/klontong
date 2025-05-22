@@ -7,7 +7,8 @@ Klontong is groceries market in Indonesia slang. This place for my support to se
 - Bun
 - Monorepo: Turborepo
 - Backend: Hono
-- Frontend: React
+- Frontend: React Router v7 
+- Styling: Tailwind
 - Validation: Zod
 - Database: Postgresql
 - ORM: Prisma
@@ -24,3 +25,5 @@ Klontong is groceries market in Indonesia slang. This place for my support to se
 - UI Filter Product
 ### Backoffice API
 - Add Product
+
+
