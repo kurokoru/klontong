@@ -43,4 +43,4 @@ yarn-error.log*
 .react-router/
 .vite/
 /build/
-../generated/prisma
+/packages/database/generated/prisma
