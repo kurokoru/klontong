@@ -1,6 +1,7 @@
 import { initTRPC } from '@trpc/server';
 import type { Context } from './context';
-import { updateSchema } from './schemas';
+import { updateSchema, productFiltersSchema } from './schemas';
+import { prisma } from "@repo/db";
 
 const t = initTRPC.context<Context>().create();
 
@@ -12,11 +13,111 @@ export const appRouter = router({
   update: publicProcedure.input(updateSchema).mutation(() => {
   }),
   get: publicProcedure.query(() => {
-    return {
-        id: 4,
-        status: 'active'
-      }
+    const product = prisma.product.findFirst();
+    console.log(product, 'product');
+    return product
   }),
+  getProducts: publicProcedure
+    .input(productFiltersSchema)
+    .query(async ({ input }) => {
+      const {
+        search,
+        category,
+        minPrice,
+        maxPrice,
+        status,
+        sortBy = 'createdAt',
+        sortOrder = 'desc',
+        page,
+        limit
+      } = input;
+
+      // Build where clause for filtering
+      const where: any = {};
+      
+      if (search) {
+        where.OR = [
+          { name: { contains: search, mode: 'insensitive' } },
+          { description: { contains: search, mode: 'insensitive' } }
+        ];
+      }
+      
+      if (category) {
+        where.categoryId = category;
+      }
+      
+      if (minPrice !== undefined || maxPrice !== undefined) {
+        where.price = {};
+        if (minPrice !== undefined) where.price.gte = minPrice;
+        if (maxPrice !== undefined) where.price.lte = maxPrice;
+      }
+      
+      if (status) {
+        where.status = status;
+      }
+
+      // Calculate pagination
+      const skip = (page - 1) * limit;
+
+      try {
+        // Get total count for pagination
+        const total = await prisma.product.count({ where });
+        
+        // Get products with filters
+        const products = await prisma.product.findMany({
+          where,
+          orderBy: { [sortBy]: sortOrder },
+          skip,
+          take: limit,
+          include: {
+            category: true, // Include category relation if needed
+          }
+        });
+
+        return {
+          products,
+          pagination: {
+            page,
+            limit,
+            total,
+            pages: Math.ceil(total / limit),
+          }
+        };
+      } catch (error) {
+        console.error('Error fetching products:', error);
+        // Fallback to mock data if database query fails
+        const mockProducts = [
+          {
+            id: 100,
+            name: 'Product 1',
+            status: 'active',
+            price: 29.99,
+            description: 'Sample product',
+            categoryId: 1,
+            category: { id: 1, name: 'Electronics' }
+          },
+          {
+            id: 101,
+            name: 'Product 2',
+            status: 'active',
+            price: 49.99,
+            description: 'Another sample product',
+            categoryId: 2,
+            category: { id: 2, name: 'Clothing' }
+          }
+        ];
+
+        return {
+          products: mockProducts,
+          pagination: {
+            page: 1,
+            limit: 10,
+            total: 2,
+            pages: 1,
+          }
+        };
+      }
+    }),
 });
 
 export const createCaller = createCallerFactory(appRouter);

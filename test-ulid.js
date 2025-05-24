@@ -1,4 +1,4 @@
-const { PrismaClient } = require('./packages/generated/prisma');
+const { PrismaClient } = require('./packages/database/generated/prisma');
 
 async function main() {
   console.log('Starting ULID test...');

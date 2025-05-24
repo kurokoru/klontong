@@ -10,7 +10,6 @@ export function meta({}: Route.MetaArgs) {
 
 export async function loader() {
   const new_data = await client.get.query();
-  console.log('new_data', typeof new_data);
   return {
     data: new_data,
   };
@@ -18,9 +17,11 @@ export async function loader() {
 
 export default function Home({ loaderData }: Route.ComponentProps) {
   const id = loaderData?.data?.id;
+  const name = loaderData?.data?.name;
   return (
     <div>
       <h1 className="font-serif text-2xl">ID: {id}</h1>
+            <h1 className="font-serif text-2xl">name: {name}</h1>
     </div>
   );
 }
