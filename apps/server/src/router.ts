@@ -69,9 +69,9 @@ export const appRouter = router({
           orderBy: { [sortBy]: sortOrder },
           skip,
           take: limit,
-          include: {
-            category: true, // Include category relation if needed
-          }
+          // include: {
+          //   category: true, // Include category relation if needed
+          // }
         });
 
         return {

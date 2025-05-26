@@ -81,42 +81,6 @@ export default function List({ loaderData }: Route.ComponentProps) {
         </div>
       </div>
       
-      {/* Search Bar */}
-      <div className="bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 py-4">
-          <Form method="get" className="flex gap-4">
-            <div className="flex-1">
-              <input
-                type="text"
-                name="search"
-                defaultValue={searchParams.get('search') || ''}
-                placeholder="Search products..."
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-              />
-            </div>
-            <button
-              type="submit"
-              className="px-6 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors"
-            >
-              Search
-            </button>
-            {searchParams.get('search') && (
-              <button
-                type="button"
-                onClick={() => {
-                  const newSearchParams = new URLSearchParams(searchParams);
-                  newSearchParams.delete('search');
-                  submit(newSearchParams, { method: 'get' });
-                }}
-                className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
-              >
-                Clear
-              </button>
-            )}
-          </Form>
-        </div>
-      </div>
-      
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 py-6">
         <div className="flex gap-6">
