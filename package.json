@@ -1,24 +1,16 @@
 {
-  "name": "with-docker",
-  "version": "0.0.1",
+  "name": "klontong",
+  "devDependencies": {
+    "turbo": "^2.5.3",
+    "typescript": "5.7.3"
+  },
   "private": true,
   "scripts": {
-    "build": "turbo run build",
-    "clean": "turbo run clean",
-    "dev": "turbo run dev",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "lint": "turbo run lint",
-    "test": "turbo run test"
-  },
-  "dependencies": {},
-  "devDependencies": {
-    "hono": "^4.7.10",
-    "prettier": "^3.2.5",
-    "turbo": "^2.5.3"
-  },
-  "engines": {
-    "node": ">=14.0.0",
-    "npm": ">=7.0.0"
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "test": "turbo test",
+    "test:integration": "vitest run --browser.headless"
   },
   "packageManager": "bun@1.1.29",
   "workspaces": [
